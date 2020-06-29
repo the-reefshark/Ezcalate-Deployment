@@ -1,0 +1,171 @@
+ html, body {
+  width: 100%;
+  height: 100%;
+  float: left;
+}
+
+body{
+    background-image: url('./Background Images/coffeeshop1.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+
+    overflow-x:hidden;  /*Prevents scrollbar from appearing during slide-in animation*/
+}
+
+
+/*Replaced with Material UI Style in Header.js*/
+/* .Header {
+    background-color: #333;
+    color: white;
+    font-family: 'Open Sans Condensed', sans-serif;
+    display: flex;
+    align-items: center;
+    padding: 20px 10px;
+}  */
+
+
+
+
+/* .todo-list {
+    background-color: white;
+    margin: auto;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid #efefef;
+    box-shadow:
+    /* The top layer shadow 
+        0 1px 1px rgba(0,0,0,0.15),
+            /* The second layer 
+        0 10px 0 -5px #eee,
+            /* The second layer shadow */
+        /*0 10px 1px -4px rgba(0,0,0,0.15),
+            /* The third layer 
+        0 20px 0 -10px #eee,
+            /* The third layer shadow 
+        0 20px 1px -9px rgba(0,0,0,0.15);
+    padding: 30px;
+ } */
+
+.todo-header {
+    width: 32%;
+    display: flex;
+    justify-content: space-between;
+    padding: 0px 10px 0px; 
+    margin-left: 10px;
+    margin-top: 20px;
+    opacity: 100%;
+}
+
+.todo-section1 {
+    margin-top: 30px;
+}
+
+.todo-section2 {
+    margin-top: 50px;
+}
+
+/* Updated with Flexbox Properties using Material UI in TodoItem */
+/* .todo-item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 0px 10px 0px; 
+    margin: 10px;
+    width: 100%; 
+    border-bottom: 1px solid #cecece;
+    font-family: Roboto, sans-serif;
+    font-weight: 100;
+    font-size: 15px;
+    color: #333333;
+    vertical-align: top;
+    position: relative;
+} */
+
+/* Updated with Flexbox Properties using Material UI in TodoItem */
+/* .date {
+    /* width: 20%;
+    margin-right: 5px;
+    text-align: left;
+    display: inline-block; 
+
+}
+
+.checkbox{
+    text-align: left;
+    margin-right: 5px;
+    margin-bottom: 5px;
+}
+
+.task {
+    border: transparent;
+    background-color: transparent;
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding-right: 20px;
+}
+
+.delete {
+    margin: 5px;
+}
+
+
+
+ .left-panel {
+    width: 20%;
+    float: left;
+    height: 100px;
+    text-align: left;
+}  */
+
+/*Replaced with Material UI Style in MainPage.js*/
+/* .mid-panel {
+    width: 80%;
+    float: left;
+    height: 100px;
+    height: 500px;
+    margin-top: 100px;
+    padding-top: 25px;
+    text-align: center;
+    background-color: white;
+    
+} */
+
+
+/*These two are necessary because ToDoList is still a class component*/
+.todo-list {
+    width: 60.0%;
+    float: left;
+    min-height: 500px;
+    margin-top: 10px;
+    padding-top: 25px;
+    text-align: center;
+    background-color: rgba(255,255,255, 0.9);
+    height: auto;
+ }
+
+.rightpanel {
+    width: 100%;
+    float: left;
+    height: 100%;
+    margin-left: 35px;
+    text-align: center;
+    
+    background-color: transparent;
+} 
+ 
+
+/*Replaced with Material UI checboxes in TodoItem*/
+ /* input[type=checkbox] {
+    margin-right: 10px;
+    font-size: 30px;
+}
+
+input[type=checkbox]:focus {
+    outline: 0;
+} */
+
