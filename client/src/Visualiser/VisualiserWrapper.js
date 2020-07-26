@@ -1,41 +1,46 @@
 import React from "react"
-import MidPanel from "./MidPanel"
-
 import { makeStyles } from '@material-ui/core/styles'
-import Box from '@material-ui/core/Box'
 
-// Background Image (change as necessary)
+import MainVisualiser from "./MainVisualiser"
+import Box from "@material-ui/core/Box"
+
 import ToDoImage from "../Background Images/coffeeshop1.jpg"
 
+
 const useStyles = makeStyles((theme) => ({
-    todolist_page: {
+    visualiser_page: {
         backgroundImage: `url(${ToDoImage})`,
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
         backgroundAttachment: "fixed",
         backgroundSize: "cover",
         width: '100vw',
-        height: '100vh'
+        height: '100vh', 
+        paddingTop: "95px",
     },
 
-    midpanel:{
-        width: "100%",
-        // float: "left",
+    main: {
+        display:"flex",
         height: "100%",
+        justifyContent: "space-around",
+        backgroundColor: "white",
+        opacity: "0.95"
+
     }
-  }));
+}));
 
-function MainPage(props) {
-
+function VisualiserWrapper(props){
     const classes = useStyles();
 
+    
     return (
-        <div className={classes.todolist_page}>
-            <Box className={classes.midpanel} >
-                <MidPanel user={ props.user }/>
+        <div className={classes.visualiser_page}>
+            <Box className={classes.main} >
+                <MainVisualiser {...props}/>
             </Box>
         </div>
     )
+
 }
 
-export default MainPage
+export default VisualiserWrapper 

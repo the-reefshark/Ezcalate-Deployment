@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express()
 const path = require("path")
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3001
 
 const todolist_model = require('./todolist_model')
 
@@ -19,8 +19,8 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client/build")))
 }
 
-app.get('/sorted/:sort_by', (req, res) => {
-  todolist_model.getTodolist(req.params.sort_by)
+app.get('/sorted/:username/:sort_by', (req, res) => {
+  todolist_model.getTodolist(req.params.username, req.params.sort_by)
   .then(response => {
     res.status(200).send(response);
   })
@@ -29,8 +29,8 @@ app.get('/sorted/:sort_by', (req, res) => {
   })
 })
 
-app.get('/filter', (req, res) => {
-  todolist_model.getFilteredTodolist(req.body)
+app.get('/filter/:username/:filter/:value', (req, res) => {
+  todolist_model.getFilteredTodolist(req.params.username, req.params.filter, req.params.value)
   .then(response => {
     res.status(200).send(response);
   })
@@ -59,8 +59,8 @@ app.post('/tododata', (req, res) => {
   })
 })
 
-app.delete('/tododata/:id', (req, res) => {
-  todolist_model.deleteTodoItem(req.params.id)
+app.delete('/tododata/:username/:id', (req, res) => {
+  todolist_model.deleteTodoItem(req.params.username, req.params.id)
   .then(response => {
     res.status(200).send(response);
   })

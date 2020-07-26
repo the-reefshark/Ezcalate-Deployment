@@ -1,89 +1,46 @@
-
-
-// import ToDoList from "./ToDoList/TodoList"
 import "./App.css"
-import React from 'react';
-// import {BrowserRouter as Router, Switch, Route} from "react-router-dom"
-// import { useAuth0 } from './context/auth0-context';
-// import TodoFormForm from "./ToDoList/TodoFormForm"
+import React from 'react'
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import { useAuth0 } from './context/auth0-context'
 
-//Imports for vert layout
+//Relevant Components to be rendered
+import LoadingScreen from './LoadingScreen'
 import MainPage from "./vert_layout/MainPage"
-import { makeStyles } from '@material-ui/core/styles';
-
-
-
-const useStyles = makeStyles((theme) => ({
-  
-  main: {
-    // backgroundImage: Image,
-    // height: "100%",
-    // backgroundposition: "center",
-    // backgroundrepeat: "no-repeat",
-    // backgroundsize: "cover"
-  }
-
-}));
+import Header from "./Header"
+import HomePage from "./HomePage/HomePage.js"
+import AboutPage from "./HomePage/AboutPage"
+import MainVisualiser from "./Visualiser/MainVisualiser"
+import VisualiserWrapper from "./Visualiser/VisualiserWrapper"
 
 function App() {
-  //const { isLoading, user, loginWithRedirect, logout } = useAuth0();
-
-  // return (
-  //   <>
-  //   {/* /* <Header/>
-  //     <div className="hero is-info is-fullheight">
-  //       <div className="hero-body">
-  //         <div className="container has-text-centered">
-  //           {!isLoading && !user && (
-  //             <>
-  //               <h1>Click Below!</h1>
-  //               <button onClick={loginWithRedirect} className="login">
-  //                 Login
-  //             </button>
-  //             </>
-  //           )}
-  //           {!isLoading && user && (
-  //             <>
-  //               <h1>You are logged in!</h1>
-  //               <p>Hello {user.name}</p>
-
-  //               {user.picture && <img src={user.picture} alt="My Avatar" />}
-  //               <hr />
-
-                // <ToDoList/> 
-
-
-  //               <button
-  //                 onClick={() => logout({ returnTo: window.location.origin })}
-  //                 className="button is-small is-dark"
-  //               >
-  //                 Logout
-  //               </button>
-  //             </>
-  //           )}
-  //         </div>
-  //       </div>
-  //     </div> */}
-    
-    
-  //   <ToDoList/> 
-  //   </>
-  // )
-
-  // Vertical Panels version:
-
+  const { isLoading, user, loginWithRedirect, logout } = useAuth0()
   
-  const classes = useStyles();
+  if (isLoading) {
+    return (
+        <LoadingScreen />
+      )
+  }
 
+  else {
+    return (
+      <>
+        <Router>
+            <Header 
+              user={user}
+              loginWithRedirect={loginWithRedirect}
+              logout={() => logout({ returnTo: window.location.origin })}
+            />
 
-  return (
-    
-      <div className={classes.main}>
-          <MainPage/>
-      </div>
-      
-   
-  )
+            <Switch>
+              <Route path="/" exact render={(props) => <HomePage {...props} loginWithRedirect={loginWithRedirect} /> } />
+              <Route path="/about" component={ AboutPage } />
+              <Route path="/todolist" render={(props) => <MainPage {...props} user={user} /> } />
+              <Route path="/visualiser" render={(props) => <VisualiserWrapper {...props} user={user} /> } />
+            </Switch>
+        </Router>
+      </>
+    )
+  }
 }
 
-export default App;
+export default App

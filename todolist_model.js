@@ -13,7 +13,7 @@ const proConfig = {
   connectionString: process.env.DATABASE_URL // heroku addons
 }
 
-const pool = new Pool(process.env.NODE_ENV === "production" ? proConfig : devConfig);
+const pool = new Pool(process.env.NODE_ENV === "production" ? proConfig : devConfig)
 
 pool.on('error', (err, client) => {
   console.error('Error: ', err);
@@ -22,35 +22,38 @@ pool.on('error', (err, client) => {
 pool.connect();
 
 // Get TodoList from database filtered by given sort_by parameter
-const getTodolist = sort_by => {
+const getTodolist = (username, sort_by) => {
   const param = 'id' // Change this to change sorting param
-  let text, today, startDate, endDate
+
+  let today, startDate, endDate
+  let text = "CREATE TABLE IF NOT EXISTS " + username + " (id SERIAL PRIMARY KEY, task_name VARCHAR, details VARCHAR, completed BOOLEAN, activity_type VARCHAR, duedate VARCHAR, dateCompleted VARCHAR, timer INTEGER);"
+  
   switch (sort_by) {
     case 'All':
-      text = 'SELECT * FROM tododata ORDER BY completed ASC, ' + param + ' ASC'
+      text += 'SELECT * FROM ' + username + ' ORDER BY completed ASC, ' + param + ' ASC;'
       break
     case 'Completed':
-      text = 'SELECT * FROM tododata WHERE completed = true ORDER BY completed ASC, ' + param + ' ASC'
+      text += 'SELECT * FROM ' + username + ' WHERE completed = true ORDER BY completed ASC, ' + param + ' ASC;'
       break
     case 'Today':
       today = new Date()
       startDate = "'" + today.getFullYear() + "-0" + (today.getMonth() + 1) + "-" + today.getDate() + "'"
-      text = 'SELECT * FROM tododata WHERE duedate = ' + startDate + ' ORDER BY completed ASC, ' + param + ' ASC'
+      text += 'SELECT * FROM ' + username + ' WHERE duedate = ' + startDate + ' ORDER BY completed ASC, ' + param + ' ASC;'
       break
     case 'Month':
       today = new Date()
       startDate = "'" + today.getFullYear() + "-" + (today.getMonth() + 1) + "-01'"
       endDate = "'" + today.getFullYear() + "-" + (today.getMonth() + 2) + "-01'"
-      text = 'SELECT * FROM tododata WHERE duedate BETWEEN ' + startDate + ' AND ' + endDate + ' ORDER BY completed ASC, ' + param + ' ASC'
+      text += 'SELECT * FROM ' + username + ' WHERE duedate BETWEEN ' + startDate + ' AND ' + endDate + ' ORDER BY completed ASC, ' + param + ' ASC;'
       break
     case 'Year':
       today = new Date()
       startDate = "'" + today.getFullYear() + "-01-01'"
       endDate = "'" + (today.getFullYear() + 1) + "-01-01'"
-      text = 'SELECT * FROM tododata WHERE duedate BETWEEN ' + startDate + ' AND ' + endDate + ' ORDER BY completed ASC, ' + param + ' ASC'
+      text += 'SELECT * FROM ' + username + ' WHERE duedate BETWEEN ' + startDate + ' AND ' + endDate + ' ORDER BY completed ASC, ' + param + ' ASC;'
       break
     default:
-      text = "SELECT * FROM tododata WHERE activity_type = '" + sort_by + "' ORDER BY completed ASC, " + param + " ASC"
+      text += "SELECT * FROM " + username + " tododata WHERE activity_type = '" + sort_by + "' ORDER BY completed ASC, " + param + " ASC;"
       break
   }
 
@@ -59,19 +62,15 @@ const getTodolist = sort_by => {
       if (error) {
         reject(error)
       }
-      resolve(results);
+      resolve(results)
     })
   })
 }
 
 // Get TodoList from database filtered by given param and sorted by given parameter (sort_by)
-// NOT BEING USED
-const getFilteredTodolist = body => {
-  const { filter, value, sort_by } = body
-
-  const text = filter !== "" || value !== "" ?
-    'SELECT * FROM tododata WHERE ' + filter + ' = ' + value + ' ORDER BY completed ASC, ' + sort_by + ' ASC' :
-    'SELECT * FROM tododata ORDER BY completed ASC, ' + sort_by + ' ASC'
+const getFilteredTodolist = (username, filter, value) => {
+  let text = "CREATE TABLE IF NOT EXISTS " + username + " (id SERIAL PRIMARY KEY, task_name VARCHAR, details VARCHAR, completed BOOLEAN, activity_type VARCHAR, duedate VARCHAR, dateCompleted VARCHAR, timer INTEGER);"
+  text += 'SELECT SUM(timer) FROM ' + username + ' WHERE ' + filter + " = '" + value + "';"
 
   return new Promise(function(resolve, reject) {
     pool.query(text, (error, results) => {
@@ -87,9 +86,9 @@ const getFilteredTodolist = body => {
 const updateTodoItem = body => {
   return new Promise(function(resolve, reject) {
 
-    const { id, task_name, details, completed, activity_type, duedate, dateCompleted, timer } = body
+    const { username, id, task_name, details, completed, activity_type, duedate, dateCompleted, timer } = body
 
-    pool.query('UPDATE tododata SET task_name = $2, details = $3, completed = $4, activity_type = $5, duedate = $6, dateCompleted = $7, timer = $8 WHERE id = $1 RETURNING *',
+    pool.query('UPDATE ' + username + ' SET task_name = $2, details = $3, completed = $4, activity_type = $5, duedate = $6, dateCompleted = $7, timer = $8 WHERE id = $1 RETURNING *',
         [id, task_name, details, completed, activity_type, duedate, dateCompleted, timer], 
       (error, results) => {
         if (error) {
@@ -103,9 +102,9 @@ const updateTodoItem = body => {
 const createTodoItem = (body) => {
   return new Promise(function(resolve, reject) {
 
-    const { task_name, details, completed, activity_type, duedate, dateCompleted } = body
+    const { username, task_name, details, completed, activity_type, duedate, dateCompleted } = body
     
-    pool.query('INSERT INTO tododata ( task_name, details, completed, activity_type, duedate, dateCompleted, timer ) VALUES ($1, $2, $3, $4, $5, $6, 0) RETURNING *',
+    pool.query('INSERT INTO ' + username + ' ( task_name, details, completed, activity_type, duedate, dateCompleted, timer ) VALUES ($1, $2, $3, $4, $5, $6, 0) RETURNING *',
         [task_name, details, completed, activity_type, duedate, dateCompleted], 
       (error, results) => {
         if (error) {
@@ -116,9 +115,9 @@ const createTodoItem = (body) => {
   })
 }
 
-const deleteTodoItem = (id) => {
+const deleteTodoItem = (username, id) => {
   return new Promise(function(resolve, reject) {
-    pool.query('DELETE FROM tododata WHERE id = $1', [id], (error, results) => {
+    pool.query('DELETE FROM ' + username + ' WHERE id = $1', [id], (error, results) => {
       if (error) {
         reject(error)
       }
