@@ -12,7 +12,7 @@ import Avatar from '@material-ui/core/Avatar'
 import Logo from "./Background Images/Ezcalate_logo.png"
 import Button from '@material-ui/core/Button'
 import Menu from '@material-ui/core/Menu'
-import MenuItem from '@material-ui/core/Menuitem'
+import MenuItem from '@material-ui/core/MenuItem'
 import Fade from '@material-ui/core/Fade'
 
 
